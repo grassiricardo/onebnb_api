@@ -3,17 +3,21 @@ class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:update]
 
   def update
-    if @user.update(user_params)
-      render :show, status: :ok
-    else
-      render json: @user.errors, status: :unprocessable_entity
+    if @user
+      if @user.update(user_params)
+        render :show, status: :ok
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      if params[:id] != ""
+        @user = User.find(params[:id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
