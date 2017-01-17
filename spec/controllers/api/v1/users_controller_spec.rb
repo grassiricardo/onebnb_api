@@ -17,7 +17,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         request.headers.merge!(@auth_headers)
       end
 
-      it "update the id user is null" do
+      it "update user with id is null" do
         put :update, params: {id: "", user: @new_attributes}
         @user.reload
         expect(@user.present?)
