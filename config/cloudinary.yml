@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: dazdkkimr
+  api_key: '617877592294334'
+  api_secret: 4DxfSgrPe8k3WpqafIb01ua79f4
+  enhance_image_tag: true
+  static_image_support: false
+production:
+  cloud_name: dazdkkimr
+  api_key: '617877592294334'
+  api_secret: 4DxfSgrPe8k3WpqafIb01ua79f4
+  enhance_image_tag: true
+  static_image_support: true
+test:
+  cloud_name: dazdkkimr
+  api_key: '617877592294334'
+  api_secret: 4DxfSgrPe8k3WpqafIb01ua79f4
+  enhance_image_tag: true
+  static_image_support: false
