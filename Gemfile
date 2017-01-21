@@ -20,10 +20,13 @@ gem 'jbuilder', '~> 2.5'
 gem 'devise_token_auth'
 gem 'omniauth'
 
+# Image base 64
 gem 'carrierwave'
 gem 'carrierwave-base64'
+
 gem 'mini_magick'
 gem 'cloudinary'
+gem 'geocoder'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
