@@ -1,16 +1,16 @@
 FactoryGirl.define do
   factory :property do
-    price "9.99"
-    name "MyString"
-    description "MyText"
-    user nil
-    accommodation_type 1
-    guest_max 1
-    beds 1
-    bedroom 1
-    address nil
-    status 1
-    facility nil
-    bathroom 1
+    price FFaker.numerify("#.##").to_f
+    name FFaker::Lorem.word
+    description FFaker::Lorem.paragraph
+    user
+    accommodation_type { rand(0..2) } # :whole_house, :whole_bedroom :shared_bedroom
+    guest_max { rand(1..10) }
+    beds { rand(1..10) }
+    bedroom { rand(1..10) }
+    address
+    status { rand(0..3) } # :active, :pending, :inactive, :blocked
+    facility
+    bathroom { rand(1..10) }
   end
 end

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :wishlist do
-    user nil
-    property nil
+    user
+    property
   end
 end

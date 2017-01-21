@@ -1,11 +1,11 @@
 FactoryGirl.define do
   factory :facility do
-    wifi false
-    washing_machine false
-    clothes_iron false
-    towels false
-    air_conditioning false
-    heater false
-    refrigerator false
+    wifi FFaker::Boolean::maybe
+    washing_machine FFaker::Boolean::maybe
+    clothes_iron FFaker::Boolean::maybe
+    towels FFaker::Boolean::maybe
+    air_conditioning FFaker::Boolean::maybe
+    heater FFaker::Boolean::maybe
+    refrigerator FFaker::Boolean::maybe
   end
 end

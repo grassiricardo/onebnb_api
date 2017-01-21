@@ -2,6 +2,12 @@ class Api::V1::UsersController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action :set_user, only: [:update]
 
+  # GET /api/v1/users/:id/wishlist
+  def wishlist
+    @api_v1_properties = current_api_v1_user.wishlists.map {|w| w.property}
+    render template: '/api/v1/properties/index', status: 200
+  end
+
   def update
     if @user
       if @user.update(user_params)
