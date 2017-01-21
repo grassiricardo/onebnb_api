@@ -2,7 +2,6 @@ class Api::V1::PropertiesController < ApplicationController
   before_action :set_api_v1_property, only: [:show, :update, :destroy, :add_to_wishlist, :remove_from_wishlist]
   before_action :authenticate_api_v1_user!, except: [:index, :show, :search]
 
-  # GET /api/v1/properties
   # GET /api/v1/properties.json
   def index
     @api_v1_properties = Property.all
@@ -10,6 +9,21 @@ class Api::V1::PropertiesController < ApplicationController
 
   # GET /api/v1/properties/1.json
   def show
+  end
+
+  # GET /api/v1/search
+  def search
+    # Caso o usuário não coloque nenhuma informação pesquisamos por qualquer uma
+    search_condition = params[:search] || '*'
+    # Caso não esteja sendo selecionado por página, pegamos a primeira
+    page = params[:page] || 1
+    # Filtra por status, presença de wifi, máquina de lavar e etc
+    # Faça você mesmo \o/
+    conditions = {status: :active}
+
+    # Realizamos a busca do ElasticSearch
+    @api_v1_properties = (Property.search search_condition, where: conditions,  page: page, per_page: 18)
+    render template: '/api/v1/properties/index', status: 200
   end
 
   # POST /api/v1/properties.json

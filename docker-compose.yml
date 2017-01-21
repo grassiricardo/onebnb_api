@@ -6,12 +6,12 @@ services:
     volumes:
       - 'postgres:/var/lib/postgresql/data'
 
-  mailcatcher:
-    image: yappabe/mailcatcher
-    ports:
-        - 1025:1025
-        - 1080:1080
-  #
+  # mailcatcher:
+  #   image: yappabe/mailcatcher
+  #   ports:
+  #       - 1025:1025
+  #       - 1080:1080
+
   # redis:
   #   image: 'redis:3.2-alpine'
   #   command: redis-server
@@ -24,7 +24,6 @@ services:
     depends_on:
       - 'postgres'
       # - 'redis'
-      - 'mailcatcher'
     build: .
     ports:
       - '3000:3000'
@@ -32,6 +31,8 @@ services:
       - '.:/onebnb_api'
     env_file:
       - '.env'
+    environment:
+      ELASTICSEARCH_URL: elasticsearch:9200
 
   # cable:
   #   depends_on:
@@ -45,6 +46,16 @@ services:
   #   env_file:
   #     - '.env'
 
+  elasticsearch:
+    image: 'elasticsearch:2'
+    ports:
+      - '9200:9200'
+    volumes:
+      - 'elastic:/usr/share/elasticsearch/data'
+    environment:
+      - Des.network.host=0.0.0.0
+
 volumes:
   redis:
   postgres:
+  elastic:

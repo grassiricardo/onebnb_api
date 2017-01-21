@@ -63,4 +63,44 @@ RSpec.describe Api::V1::PropertiesController, type: :controller do
       end
     end
   end
+
+  describe "GET #search" do
+    before do
+      request.env["HTTP_ACCEPT"] = 'application/json'
+    end
+
+    context "with a property associated a search query" do
+      it "receive one result when property active" do
+        @address = create(:address, city: 'Sao Paulo')
+        @property = create(:property, address: @address, status: :active)
+        # Force reindex
+        Property.reindex
+
+        get :search, params: {search: 'Sao Paulo'}
+        expect(JSON.parse(response.body).count).to eql(1)
+      end
+
+      it "receive zero result when property not active" do
+        @address = create(:address, city: 'Sao Paulo')
+        @property = create(:property, address: @address, status: :inactive)
+        # Force reindex
+        Property.reindex
+
+        get :search, params: {search: 'Sao Paulo'}
+        expect(JSON.parse(response.body).count).to eql(0)
+      end
+    end
+
+    context "without a property associated a search query" do
+      it "receive zero result" do
+        @address = create(:address, city: 'Sao Paulo')
+        @property = create(:property, address: @address)
+        # Force reindex
+        Property.reindex
+
+        get :search, params: {search: 'Manaus'}
+        expect(JSON.parse(response.body).count).to eql(0)
+      end
+    end
+  end
 end
