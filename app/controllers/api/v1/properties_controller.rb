@@ -74,7 +74,9 @@ class Api::V1::PropertiesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v1_property
-      @api_v1_property = Property.find(params[:id])
+      if params[:id] != ""
+        @api_v1_property = Property.find(params[:id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
