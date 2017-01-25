@@ -29,13 +29,6 @@ ActiveRecord::Schema.define(version: 20170120235530) do
     t.datetime "updated_at",   null: false
   end
 
-  create_table "api_v1_properties", force: :cascade do |t|
-    t.string   "title"
-    t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
   create_table "facilities", force: :cascade do |t|
     t.boolean  "wifi"
     t.boolean  "washing_machine"
