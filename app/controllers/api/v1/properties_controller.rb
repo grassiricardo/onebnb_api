@@ -2,6 +2,7 @@ class Api::V1::PropertiesController < ApplicationController
   before_action :set_api_v1_property, only: [:show, :update, :destroy, :add_to_wishlist, :remove_from_wishlist]
   before_action :authenticate_api_v1_user!, except: [:index, :show, :search]
 
+  # GET /api/v1/properties
   # GET /api/v1/properties.json
   def index
     @api_v1_properties = Property.all
@@ -21,39 +22,45 @@ class Api::V1::PropertiesController < ApplicationController
     # Faça você mesmo \o/
     conditions = {status: :active}
 
-    if params[:wifi]
-      conditions += {wifi: params[:wifi]}
-    end
-    if params[:address_country]
-      conditions += {address_country: params[:address_country]}
-    end
-    if params[:address_city]
-      conditions += {address_city: params[:address_city]}
-    end
-    if params[:address_state]
-      conditions += {address_state: params[:address_state]}
-    end
-    if params[:washing_machine]
-      conditions += {washing_machine: params[:washing_machine]}
-    end
-    if params[:clothes_iron]
-      conditions += {clothes_iron: params[:clothes_iron]}
-    end
-    if params[:towels]
-      conditions += {towels: params[:towels]}
-    end
-    if params[:air_conditioning]
-      conditions += {air_conditioning: params[:air_conditioning]}
-    end
-    if params[:refrigerato]
-      conditions += {refrigerato: params[:refrigerato]}
-    end
-    if params[:heater]
-      conditions += {heater: params[:heater]}
-    end
+    # if params[:minPrice] && params[:maxPrice]
+    #   conditions += {price: [params[:minPrice], params[:maxPrice]]}.to_s
+    # end
+    # if params[:wifi]
+    #   wifi = {wifi: params[:wifi]}
+    # end
+    # if params[:address_country]
+    #   address_country = {address_country: params[:address_country]}
+    # end
+    # if params[:address_city]
+    #   address_city = {address_city: params[:address_city]}
+    # end
+    # if params[:address_state]
+    #   address_state = {address_state: params[:address_state]}
+    # end
+    # if params[:washing_machine]
+    #   washing_machine = {washing_machine: params[:washing_machine]}
+    # end
+    # if params[:clothes_iron]
+    #   clothes_iron = {clothes_iron: params[:clothes_iron]}
+    # end
+    # if params[:towels]
+    #   towels = {towels: params[:towels]}
+    # end
+    # if params[:air_conditioning]
+    #   air_conditioning = {air_conditioning: params[:air_conditioning]}
+    # end
+    # if params[:refrigerato]
+    #   refrigerato = {refrigerato: params[:refrigerato]}
+    # end
+    # if params[:heater]
+    #   heater = {heater: params[:heater]}
+    # end
+    #
+    # byebug
 
     # Realizamos a busca do ElasticSearch
-    @api_v1_properties = (Property.search search_condition, where: conditions,  page: page, per_page: 18)
+    @api_v1_properties = Property.search search_condition, where: conditions,  page: page, per_page: 18
+    # @total_results = @api_v1_properties.response['hits']['total']
     render template: '/api/v1/properties/index', status: 200
   end
 
@@ -105,9 +112,7 @@ class Api::V1::PropertiesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v1_property
-      if params[:id] != ""
-        @api_v1_property = Property.find(params[:id])
-      end
+      @api_v1_property = Property.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

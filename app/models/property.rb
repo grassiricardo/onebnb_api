@@ -24,7 +24,8 @@ class Property < ApplicationRecord
       towels: facility.towels,
       air_conditioning: facility.air_conditioning,
       refrigerato: facility.refrigerator,
-      heater: facility.heater
+      heater: facility.heater,
+      price: price
     }
   end
 
