@@ -9,6 +9,9 @@ class Property < ApplicationRecord
   belongs_to :facility
   has_many :wishlists
   has_many :photos
+
+  validates_presence_of :user
+  
   searchkick
 
   def search_data
