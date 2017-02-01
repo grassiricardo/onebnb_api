@@ -10,9 +10,14 @@ class Property < ApplicationRecord
   has_many :wishlists
   has_many :photos
 
-  validates_presence_of :user
-  
+  # Associa aos comentários
+  has_many :comments
   searchkick
+
+  # Força a ter esses campos preenchidos para criar um Property
+  validates_presence_of :address, :facility, :user, :status, :price, :photos,
+                        :accommodation_type, :beds, :bedroom, :bathroom, :guest_max,
+                        :description
 
   def search_data
     {
@@ -27,9 +32,7 @@ class Property < ApplicationRecord
       towels: facility.towels,
       air_conditioning: facility.air_conditioning,
       refrigerato: facility.refrigerator,
-      heater: facility.heater,
-      price: price
+      heater: facility.heater
     }
   end
-
 end
