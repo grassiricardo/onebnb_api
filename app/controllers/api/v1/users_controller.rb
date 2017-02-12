@@ -24,6 +24,11 @@ class Api::V1::UsersController < ApplicationController
       render json: errors, status: :unprocessable_entity
     end
   end
+
+  def current_user
+    @user = current_api_v1_user
+    render template: '/api/v1/users/show', status: 200
+  end
  
   private
     # Use callbacks to share common setup or constraints between actions.

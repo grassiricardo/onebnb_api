@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
       get 'users/wishlist', to: 'users#wishlist'
       put 'users', to: 'users#update'
+      get 'current_user', to: 'users#current_user'
+      
       get 'search', to: 'properties#search'
       get 'autocomplete', to: 'properties#autocomplete'
       
