@@ -1,7 +1,7 @@
 class Api::V1::PropertiesController < ApplicationController
   before_action :set_api_v1_property, only: [:show, :update, :destroy, :add_to_wishlist, :remove_from_wishlist]
-  before_action :authenticate_api_v1_user!, except: [:index, :show, :search]
-
+  before_action :authenticate_api_v1_user!, except: [:index, :show, :search, :autocomplete]
+  
   # GET /api/v1/properties.json
   def index
     @api_v1_properties = Property.all
@@ -9,6 +9,17 @@ class Api::V1::PropertiesController < ApplicationController
 
   # GET /api/v1/properties/1.json
   def show
+  end
+
+  # GET /api/v1/autocomplete.json
+  def autocomplete
+    results = []
+    Property.where(status: :active).each do |property|
+      results << property.name
+      results << property.address.city
+      results << property.address.country 
+    end 
+    render json: results, status: 200 
   end
 
   # GET /api/v1/search
