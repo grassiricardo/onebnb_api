@@ -7,16 +7,16 @@ Rails.application.routes.draw do
       get 'users/wishlist', to: 'users#wishlist'
       put 'users', to: 'users#update'
       get 'current_user', to: 'users#current_user'
-      
-      get 'search', to: 'properties#search'
-      get 'autocomplete', to: 'properties#autocomplete'
-      
+
       resources :reservations do
         member do
           post 'evaluation', to: 'reservation#evaluation'
         end
       end
 
+      get 'featured', to: 'properties#featured'
+      get 'search', to: 'properties#search'
+      get 'autocomplete', to: 'properties#autocomplete'
       resources :properties do
         member do
           post 'wishlist', to: 'properties#add_to_wishlist'
