@@ -10,6 +10,7 @@ class Property < ApplicationRecord
   has_many :wishlists
   has_many :photos
   has_many :reservations
+  has_many :visit_properties
   # Associa aos comentários
   has_many :comments
   searchkick

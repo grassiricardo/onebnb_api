@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212154406) do
+ActiveRecord::Schema.define(version: 20170213020521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,6 +142,13 @@ ActiveRecord::Schema.define(version: 20170212154406) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
   end
 
+  create_table "visit_properties", force: :cascade do |t|
+    t.integer "property_id"
+    t.integer "user_id"
+    t.index ["property_id"], name: "index_visit_properties_on_property_id", using: :btree
+    t.index ["user_id"], name: "index_visit_properties_on_user_id", using: :btree
+  end
+
   create_table "wishlists", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "property_id"
@@ -156,6 +163,8 @@ ActiveRecord::Schema.define(version: 20170212154406) do
   add_foreign_key "properties", "facilities"
   add_foreign_key "properties", "users"
   add_foreign_key "users", "addresses"
+  add_foreign_key "visit_properties", "properties"
+  add_foreign_key "visit_properties", "users"
   add_foreign_key "wishlists", "properties"
   add_foreign_key "wishlists", "users"
 end

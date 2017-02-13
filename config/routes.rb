@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :properties do
         member do
           post 'wishlist', to: 'properties#add_to_wishlist'
+          post 'visitproperty', to: 'properties#visit_property'
           delete 'wishlist', to: 'properties#remove_from_wishlist'
         end
       end

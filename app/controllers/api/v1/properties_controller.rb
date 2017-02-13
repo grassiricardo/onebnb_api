@@ -1,6 +1,6 @@
 class Api::V1::PropertiesController < ApplicationController
-  before_action :set_api_v1_property, only: [:show, :update, :destroy, :add_to_wishlist, :remove_from_wishlist]
-  before_action :authenticate_api_v1_user!, except: [:index, :show, :search, :autocomplete, :featured]
+  before_action :set_api_v1_property, only: [:show, :update, :destroy, :add_to_wishlist, :remove_from_wishlist, :visit_property]
+  before_action :authenticate_api_v1_user!, except: [:index, :show, :search, :autocomplete, :featured, :visit_property]
  
   # GET /api/v1/properties.json
   def index
@@ -19,7 +19,17 @@ class Api::V1::PropertiesController < ApplicationController
       results << property.address.city
       results << property.address.country
     end
-    render json: results, status: 200
+    render json: results.uniq, status: 200
+  end
+
+  def visit_property
+    begin
+      byebug
+      @api_v1_property.visit_properties.find_or_create_by(user: current_api_v1_user)
+      render json: {success: true}
+    rescue Exception => errors
+      render json: errors, status: :unprocessable_entity
+    end
   end
  
   # GET /api/v1/featured.json
@@ -27,12 +37,33 @@ class Api::V1::PropertiesController < ApplicationController
     properties = []
     begin
       # Tenta pegar 3 propriedades com a flag de prioridade
-      Property.where(priority: true, status: :active).order("RANDOM()").limit(3).each {|p| properties << p}
-      # Verifica quantas propriedades faltam pra completar 3
-      missing = 3 - properties.count
-      # Pega as propriedades faltantes caso existam
-      Property.where(status: :active).order("RANDOM()").limit(missing).each {|p| properties << p} if missing > 0
- 
+      Property.where(priority: true, status: :active).order("RANDOM()").limit(1).each {|p| properties << p}
+      # Faz loop ate que o arry de properties tenha 2 elementos
+      while true
+        propertyActive = Property.where(status: :active).order("RANDOM()").limit(1)
+        if properties.first.id != propertyActive.first.id
+          properties += propertyActive
+          break
+        end
+      end
+      # Faz um loop e verifica todas as visitas as propriedades, e depois verifica se ja existe no arry se nao existir adiciona.
+      #corrigir o bug de loop
+      exite = false
+      while true
+        propertyVisit = VisitProperty.all.order("RANDOM()").limit(10)
+        properties.each do |p|
+          if p.id == propertyVisit.first.id
+            exite = true
+            return
+          end
+        end
+        if !exite
+          properties += Property.where(id: propertyVisit.first.id)
+          break
+        end
+        exite = false
+      end
+       
       @api_v1_properties = properties
  
       render template: '/api/v1/properties/index', status: 200
@@ -85,6 +116,7 @@ class Api::V1::PropertiesController < ApplicationController
   # POST /api/v1/properties/:id/wishlist.json
   def add_to_wishlist
     begin
+      byebug
       @api_v1_property.wishlists.find_or_create_by(user: current_api_v1_user)
       render json: {success: true}
     rescue Exception => errors

@@ -64,6 +64,28 @@ RSpec.describe Api::V1::PropertiesController, type: :controller do
     end
   end
 
+  describe "POST #visit_property" do
+    before do
+      @user = create(:user)
+      @property = create(:property)
+
+      @auth_headers = @user.create_new_auth_token
+      request.env["HTTP_ACCEPT"] = 'application/json'
+    end
+
+    context "with valid params and tokens" do
+      before do
+        request.headers.merge!(@auth_headers)
+      end
+
+      it "add to visit_property" do
+        post :visit_property, params: {id: @property.id}
+        @property.reload
+        expect(@property.visit_properties.last.id).to eql(VisitProperty.last.id)
+      end
+    end
+  end
+
   describe "GET #search" do
     before do
       request.env["HTTP_ACCEPT"] = 'application/json'
