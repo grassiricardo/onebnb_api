@@ -36,33 +36,9 @@ class Api::V1::PropertiesController < ApplicationController
   def featured
     properties = []
     begin
-      # Tenta pegar 3 propriedades com a flag de prioridade
       Property.where(priority: true, status: :active).order("RANDOM()").limit(1).each {|p| properties << p}
-      # Faz loop ate que o arry de properties tenha 2 elementos
-      while true
-        propertyActive = Property.where(status: :active).order("RANDOM()").limit(1)
-        if properties.first.id != propertyActive.first.id
-          properties += propertyActive
-          break
-        end
-      end
-      # Faz um loop e verifica todas as visitas as propriedades, e depois verifica se ja existe no arry se nao existir adiciona.
-      #corrigir o bug de loop
-      exite = false
-      while true
-        propertyVisit = VisitProperty.all.order("RANDOM()").limit(10)
-        properties.each do |p|
-          if p.id == propertyVisit.first.id
-            exite = true
-            return
-          end
-        end
-        if !exite
-          properties += Property.where(id: propertyVisit.first.id)
-          break
-        end
-        exite = false
-      end
+      Property.where('id != ?',properties.first.id).where(status: :active).order("RANDOM()").limit(1).each {|p| properties << p}
+      Property.where(id: VisitProperty.all.order("RANDOM()").limit(10).first.property_id).each {|p| properties << p}
        
       @api_v1_properties = properties
  
