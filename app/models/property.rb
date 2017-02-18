@@ -11,6 +11,8 @@ class Property < ApplicationRecord
   has_many :photos
   has_many :reservations
   has_many :visit_properties
+  has_many :talks
+  has_many :messages  
   # Associa aos comentários
   has_many :comments
   searchkick

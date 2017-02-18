@@ -12,4 +12,6 @@ class User < ActiveRecord::Base
   belongs_to :address
   has_many :reservations
   has_many :visit_properties
+  has_many :talks
+  has_many :messages
 end

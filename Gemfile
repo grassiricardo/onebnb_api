@@ -28,6 +28,7 @@ gem 'mini_magick'
 gem 'cloudinary'
 gem 'geocoder'
 gem 'searchkick'
+gem 'will_paginate'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
