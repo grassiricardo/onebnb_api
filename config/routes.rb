@@ -14,7 +14,8 @@ Rails.application.routes.draw do
       get 'users/wishlist', to: 'users#wishlist'
       put 'users', to: 'users#update'
       get 'current_user', to: 'users#current_user'
-
+      
+      get 'get_by_property', to: 'reservations#get_by_property'
       resources :reservations do
         member do
           post 'evaluation', to: 'reservations#evaluation'
