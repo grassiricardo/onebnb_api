@@ -12,9 +12,10 @@ class Property < ApplicationRecord
   has_many :reservations
   has_many :visit_properties
   has_many :talks
-  has_many :messages  
+  has_many :messages
   # Associa aos comentários
   has_many :comments
+  has_many :properties
   searchkick
 
   # Força a ter esses campos preenchidos para criar um Property
