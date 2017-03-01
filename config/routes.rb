@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get 'featured', to: 'properties#featured'
       get 'search', to: 'properties#search'
       get 'autocomplete', to: 'properties#autocomplete'
+      get 'trips', to: 'properties#trips'
       resources :properties do
         member do
           post 'wishlist', to: 'properties#add_to_wishlist'
