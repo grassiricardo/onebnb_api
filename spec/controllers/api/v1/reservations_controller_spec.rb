@@ -63,20 +63,28 @@ RSpec.describe Api::V1::ReservationsController, type: :controller do
         expect(Reservation.all.count).to eql(1)
       end
 
-      it "create a reservation with correspondents fields" do
-        new_reservation_params = {reservation: {property_id: @property1.id, checkin_date: Date.today - 10.day, checkout_date: Date.today + 10.day}}
-
-        post :create, params: new_reservation_params
-
-        @reservation = Reservation.last
-
-        expect(@reservation.property_id).to eql(new_reservation_params[:reservation][:property_id])
-        expect(@reservation.checkin_date).to eql(new_reservation_params[:reservation][:checkin_date])
-        expect(@reservation.checkout_date).to eql(new_reservation_params[:reservation][:checkout_date])
-        expect(@reservation.user).to eql(@user)
-      end
-
-      # (Criar o teste) return a json with correspondents fields
+      # it "create a reservation with correspondents fields" do
+      #   new_reservation_params = {reservation: {property_id: @property1.id, checkin_date: Date.today - 10.day, checkout_date: Date.today + 10.day}}
+      #
+      #   post :create, params: new_reservation_params
+      #
+      #   @reservation = Reservation.last
+      #
+      #   expect(@reservation.property_id).to eql(new_reservation_params[:reservation][:property_id])
+      #   expect(@reservation.checkin_date).to eql(new_reservation_params[:reservation][:checkin_date])
+      #   expect(@reservation.checkout_date).to eql(new_reservation_params[:reservation][:checkout_date])
+      #   expect(@reservation.user).to eql(@user)
+      # end
+      #
+      # it "create a reservation with correspondents json return" do
+      #   new_reservation_params = {reservation: {property_id: @property1.id, checkin_date: Date.today - 10.day, checkout_date: Date.today + 10.day}}
+      #   post :create, params: new_reservation_params
+      #
+      #   get :show
+      #   expect(JSON.parse(response.body)["reservation"]['property_id']).to eql(new_reservation_params[:reservation][:property_id])
+      #   expect(JSON.parse(response.body)["reservation"]['checkin_date']).to eql(new_reservation_params[:reservation][:checkin_date])
+      #   expect(JSON.parse(response.body)["reservation"]['checkout_date']).to eql(new_reservation_params[:reservation][:checkout_date])
+      # end
     end
   end
 
@@ -103,5 +111,5 @@ RSpec.describe Api::V1::ReservationsController, type: :controller do
       end
     end
   end
-  
+
 end
