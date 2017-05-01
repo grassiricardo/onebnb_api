@@ -1,5 +1,6 @@
 class Api::V1::ReservationsController < ApplicationController
-	before_action :set_api_v1_reservation, only: [:evaluation, :create]
+	before_action :set_api_v1_reservation, only: [:evaluation, :cancel]
+	before_action :authenticate_api_v1_user!
 
 	# POST /api/v1/reservation.json
 	def create
@@ -8,6 +9,16 @@ class Api::V1::ReservationsController < ApplicationController
 	    render :show, status: :created
 	  else
 	    render json: @api_v1_reservation.errors, status: :unprocessable_entity
+	  end
+	end
+
+	# POST /cancel.json
+	def cancel
+	  begin
+	    @api_v1_reservation.update(status: :canceled)
+	    render json: {success: true}, status: 200
+	  rescue Exception => errors
+	    render json: errors, status: :unprocessable_entity
 	  end
 	end
 

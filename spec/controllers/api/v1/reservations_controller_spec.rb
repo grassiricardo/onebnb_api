@@ -1,6 +1,50 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ReservationsController, type: :controller do
+  describe "POST #cancel" do
+    before do
+      @user = create(:user)
+      @auth_headers = @user.create_new_auth_token
+      request.env["HTTP_ACCEPT"] = 'application/json'
+    end
+
+    context "User is owner of the Reservation" do
+      before do
+        request.headers.merge!(@auth_headers)
+        @reservation = create(:reservation, user: @user, status: :pending)
+      end
+
+      it "Change status of pending to canceled" do
+        post :cancel, params: {id: @reservation.id}
+        @reservation.reload
+        expect(@reservation.status).to eql("canceled")
+      end
+
+      it "Receive status 200" do
+        post :cancel, params: {id: @reservation.id}
+        expect(response.status).to eql(200)
+      end
+    end
+
+    context "User is not the owner of the Reservation" do
+      before do
+        request.headers.merge!(@auth_headers)
+        @reservation = create(:reservation, status: :pending)
+      end
+
+      it "Status keep pending" do
+        post :cancel, params: {id: @reservation.id}
+        @reservation.reload
+        expect(@reservation.status).to eql("pending")
+      end
+
+      it "Receive status 422" do
+        post :cancel, params: {id: @reservation.id}
+        expect(response.status).to eql(422)
+      end
+    end
+  end
+
   describe "GET #evaluation" do
     before do
       @user = create(:user)
