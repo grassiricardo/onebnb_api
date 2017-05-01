@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       get 'users/wishlist', to: 'users#wishlist'
       put 'users', to: 'users#update'
       get 'current_user', to: 'users#current_user'
-      
+
       get 'get_by_property', to: 'reservations#get_by_property'
       resources :reservations do
         member do
@@ -32,6 +32,7 @@ Rails.application.routes.draw do
           post 'wishlist', to: 'properties#add_to_wishlist'
           post 'visitproperty', to: 'properties#visit_property'
           delete 'wishlist', to: 'properties#remove_from_wishlist'
+          get 'check_availability', to: 'properties#check_availability'
         end
       end
     end

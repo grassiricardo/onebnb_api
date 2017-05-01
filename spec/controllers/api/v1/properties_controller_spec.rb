@@ -1,6 +1,57 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::PropertiesController, type: :controller do
+  describe "GET #check_availability" do
+    before do
+      @user = create(:user)
+      @auth_headers = @user.create_new_auth_token
+      request.env["HTTP_ACCEPT"] = 'application/json'
+    end
+
+    context "A date with avaibility" do
+      before do
+        @property = create(:property)
+
+        @busy_period1 = {checkin_date: Date.today + 1.day, checkout_date: Date.today + 2.day}
+        @busy_period2 = {checkin_date: Date.today + 5.day, checkout_date: Date.today + 6.day}
+
+        @reservation1 = create(:reservation, property: @property, checkin_date: @busy_period1[:checkin_date], checkout_date: @busy_period1[:checkout_date])
+        @reservation2 = create(:reservation, property: @property, checkin_date: @busy_period2[:checkin_date], checkout_date: @busy_period2[:checkin_date])
+
+        request.headers.merge!(@auth_headers)
+      end
+
+      it "return true" do
+        get :check_availability, params: {id: @property.id, checkin_date: (Date.today + 3.day).strftime("%d/%m/%Y"), checkout_date: (Date.today + 4.day).strftime("%d/%m/%Y")}
+        expect(JSON.parse(response.body)["success"]).to eql(true)
+      end
+
+      it "return status 200" do
+        get :check_availability, params: {id: @property.id, checkin_date: (Date.today + 3.day).strftime("%d/%m/%Y"), checkout_date: (Date.today + 4.day).strftime("%d/%m/%Y")}
+        expect(response.status).to eql(200)
+      end
+    end
+
+    context "A date without avaibility" do
+      before do
+        @property = create(:property)
+
+        @busy_period1 = {checkin_date: Date.today + 1.day, checkout_date: Date.today + 2.day}
+        @busy_period2 = {checkin_date: Date.today + 5.day, checkout_date: Date.today + 6.day}
+
+        @reservation1 = create(:reservation, property: @property, checkin_date: @busy_period1[:checkin_date], checkout_date: @busy_period1[:checkout_date])
+        @reservation2 = create(:reservation, property: @property, checkin_date: @busy_period2[:checkin_date], checkout_date: @busy_period2[:checkin_date])
+
+        request.headers.merge!(@auth_headers)
+      end
+
+      it "return false" do
+        get :check_availability, params: {id: @property.id, checkin_date: (Date.today + 1.day).strftime("%d/%m/%Y"), checkout_date: (Date.today + 4.day).strftime("%d/%m/%Y")}
+        expect(JSON.parse(response.body)["success"]).to eql(false)
+      end
+    end
+  end
+
   describe "POST #wishlist" do
     before do
       @user = create(:user)
@@ -162,51 +213,7 @@ RSpec.describe Api::V1::PropertiesController, type: :controller do
       end
     end
   end
-  # TODO Refazer testes de featured
-  # describe "GET #featured" do
-  #   before do
-  #     request.env["HTTP_ACCEPT"] = 'application/json'
-  #   end
-  #
-  #   context "with 5 existing properties and 3 with priority" do
-  #     before do
-  #       @property1 = create(:property, status: :active, priority: true)
-  #       @property2 = create(:property, status: :active, priority: true)
-  #       @property3 = create(:property, status: :active, priority: true)
-  #       @property4 = create(:property, status: :active, priority: false)
-  #       @property5 = create(:property, status: :active, priority: false)
-  #     end
-  #
-  #     it "return 3 elements of result" do
-  #       get :featured
-  #       expect(JSON.parse(response.body).count).to eql(3)
-  #     end
-  #
-  #     it "return the 3 properties thar are priority" do
-  #       get :featured
-  #       expect(JSON.parse(response.body)[0]["property"]["priority"]).to eql(true)
-  #       expect(JSON.parse(response.body)[1]["property"]["priority"]).to eql(true)
-  #       expect(JSON.parse(response.body)[2]["property"]["priority"]).to eql(true)
-  #     end
-  #   end
-  #
-  #   context "with 5 properties and 2 with priority" do
-  #     before do
-  #       @property1 = create(:property, status: :active, priority: true)
-  #       @property2 = create(:property, status: :active, priority: true)
-  #       @property3 = create(:property, status: :active, priority: false)
-  #       @property4 = create(:property, status: :active, priority: false)
-  #       @property5 = create(:property, status: :active, priority: false)
-  #     end
-  #
-  #     it "return 2 properties with priority and 1 without priority" do
-  #       get :featured
-  #       expect(JSON.parse(response.body)[0]["property"]["priority"]).to eql(true)
-  #       expect(JSON.parse(response.body)[1]["property"]["priority"]).to eql(true)
-  #       expect(JSON.parse(response.body)[2]["property"]["priority"]).to eql(false)
-  #     end
-  #   end
-  # end
+
   describe "GET #trips" do
     before do
       @user = create(:user)
