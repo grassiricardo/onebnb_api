@@ -15,13 +15,13 @@ RSpec.describe Api::V1::ReservationsController, type: :controller do
       end
 
       it "Change status of pending to canceled" do
-        post :cancel, params: {id: @reservation.id}
+        put :cancel, params: {id: @reservation.id}
         @reservation.reload
         expect(@reservation.status).to eql("canceled")
       end
 
       it "Receive status 200" do
-        post :cancel, params: {id: @reservation.id}
+        put :cancel, params: {id: @reservation.id}
         expect(response.status).to eql(200)
       end
     end
@@ -33,13 +33,13 @@ RSpec.describe Api::V1::ReservationsController, type: :controller do
       end
 
       it "Status keep pending" do
-        post :cancel, params: {id: @reservation.id}
+        put :cancel, params: {id: @reservation.id}
         @reservation.reload
         expect(@reservation.status).to eql("pending")
       end
 
       it "Receive status 422" do
-        post :cancel, params: {id: @reservation.id}
+        put :cancel, params: {id: @reservation.id}
         expect(response.status).to eql(422)
       end
     end
