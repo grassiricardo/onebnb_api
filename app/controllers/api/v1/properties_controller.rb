@@ -1,7 +1,7 @@
 class Api::V1::PropertiesController < ApplicationController
   before_action :set_api_v1_property, only: [:show, :update, :destroy, :add_to_wishlist, :remove_from_wishlist, :visit_property, :check_availability]
-  before_action :authenticate_api_v1_user!, except: [:index, :show, :search, :autocomplete, :featured, :visit_property]
-
+  before_action :authenticate_api_v1_user!, except: [:index, :show, :search, :autocomplete, :featured, :visit_property, :check_availability]
+  
   # GET /api/v1/properties.json
   def index
     @api_v1_properties = Property.all
