@@ -5,7 +5,9 @@ class Api::V1::ReservationsController < ApplicationController
 	# POST /api/v1/reservation.json
 	def create
 	  @api_v1_reservation = Reservation.new(reservation_params)
+
 	  if @api_v1_reservation.save
+	    ReservationMailer.new_reservation(@api_v1_reservation).deliver_now
 	    render :show, status: :created
 	  else
 	    render json: @api_v1_reservation.errors, status: :unprocessable_entity

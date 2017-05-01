@@ -63,6 +63,12 @@ RSpec.describe Api::V1::ReservationsController, type: :controller do
         @reservation4 = create(:reservation, property: @property1, evaluation: true, user: @user)
       end
 
+      it "will send a notification mail to Property Owner" do
+        post :create, params: {reservation: {property_id: @property1.id, checkin_date: Date.today - 10.day, checkout_date: Date.today + 10.day}}
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.last.to).to eq([Reservation.last.property.user.email])
+      end
+
       it "return rating 4 when new rating is 0" do
         @reservation5 = create(:reservation, property: @property1, evaluation: false, user: @user)
 
